@@ -99,13 +99,14 @@ export default function Exams() {
 
             {/* Exam Schedule Tab */}
             <TabsContent value="schedule" activeTab={activeTab}>
-              <Card>
+              {/* Desktop View */}
+              <Card className="hidden md:block">
                 <CardHeader>
                   <CardTitle>Upcoming Exam Schedule</CardTitle>
                 </CardHeader>
                 <CardContent>
                   {examSchedule.map((schedule) => (
-                    <div key={schedule.examId} className="space-y-4">
+                    <div key={schedule.examId} className="space-y-4 mb-6 last:mb-0">
                       <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg">
                         <div>
                           <h3 className="font-semibold text-gray-900">{schedule.examName}</h3>
@@ -138,11 +139,45 @@ export default function Exams() {
                   ))}
                 </CardContent>
               </Card>
+
+              {/* Mobile View */}
+              <div className="md:hidden space-y-6">
+                {examSchedule.map((schedule) => (
+                  <Card key={schedule.examId}>
+                    <CardHeader>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <CardTitle className="text-lg">{schedule.examName}</CardTitle>
+                          <p className="text-sm text-gray-600">Class {schedule.class}</p>
+                        </div>
+                        <Badge variant="info">Upcoming</Badge>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        {schedule.schedule.map((item, index) => (
+                          <div key={index} className="p-3 border border-gray-200 rounded-lg">
+                            <div className="flex justify-between items-start mb-2">
+                              <div>
+                                <p className="font-semibold text-gray-900">{item.subject}</p>
+                                <p className="text-sm text-gray-600">{item.day}</p>
+                              </div>
+                              <Badge variant="secondary" className="text-xs">{item.time}</Badge>
+                            </div>
+                            <p className="text-sm text-gray-600">{item.date}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </TabsContent>
 
             {/* Results Tab */}
             <TabsContent value="results" activeTab={activeTab}>
-              <Card>
+              {/* Desktop Table */}
+              <Card className="hidden md:block">
                 <CardHeader>
                   <CardTitle>Exam Results - Mid Term Examination</CardTitle>
                 </CardHeader>
@@ -195,6 +230,50 @@ export default function Exams() {
                   </Table>
                 </CardContent>
               </Card>
+
+              {/* Mobile Cards */}
+              <div className="md:hidden space-y-4">
+                <h3 className="text-lg font-semibold text-gray-900">Mid Term Examination Results</h3>
+                {examResults.map((result) => (
+                  <Card key={result.studentId}>
+                    <CardContent className="p-4">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex items-start gap-3">
+                          <Badge variant={result.rank <= 3 ? 'success' : 'secondary'} className="text-base">
+                            #{result.rank}
+                          </Badge>
+                          <div>
+                            <h4 className="font-semibold text-gray-900">{result.studentName}</h4>
+                            <p className="text-sm text-gray-600">Roll: {result.roll}</p>
+                            <p className="text-sm text-gray-600">Class {result.class}</p>
+                          </div>
+                        </div>
+                        <span className="font-bold text-xl text-blue-600">{result.grade}</span>
+                      </div>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Marks Obtained:</span>
+                          <span className="font-medium">{result.obtainedMarks} / {result.totalMarks}</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-gray-600">Percentage:</span>
+                          <Badge
+                            variant={
+                              result.percentage >= 90
+                                ? 'success'
+                                : result.percentage >= 75
+                                ? 'info'
+                                : 'warning'
+                            }
+                          >
+                            {result.percentage}%
+                          </Badge>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </TabsContent>
 
             {/* Exam List Tab */}

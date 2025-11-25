@@ -152,26 +152,41 @@ export default function StudentProfile() {
                 </CardHeader>
                 <CardContent>
                   {studentAttendance ? (
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Date</TableHead>
-                          <TableHead>Status</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {studentAttendance.records.map((record, index) => (
-                          <TableRow key={index}>
-                            <TableCell>{record.date}</TableCell>
-                            <TableCell>
-                              <Badge variant={record.status === 'Present' ? 'success' : 'danger'}>
-                                {record.status}
-                              </Badge>
-                            </TableCell>
+                    <>
+                      {/* Desktop Table */}
+                      <Table className="hidden sm:table">
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Date</TableHead>
+                            <TableHead>Status</TableHead>
                           </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {studentAttendance.records.map((record, index) => (
+                            <TableRow key={index}>
+                              <TableCell>{record.date}</TableCell>
+                              <TableCell>
+                                <Badge variant={record.status === 'Present' ? 'success' : 'danger'}>
+                                  {record.status}
+                                </Badge>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+
+                      {/* Mobile List */}
+                      <div className="sm:hidden space-y-2">
+                        {studentAttendance.records.map((record, index) => (
+                          <div key={index} className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
+                            <span className="text-sm text-gray-900">{record.date}</span>
+                            <Badge variant={record.status === 'Present' ? 'success' : 'danger'}>
+                              {record.status}
+                            </Badge>
+                          </div>
                         ))}
-                      </TableBody>
-                    </Table>
+                      </div>
+                    </>
                   ) : (
                     <p className="text-gray-600">No attendance records found.</p>
                   )}
@@ -189,7 +204,7 @@ export default function StudentProfile() {
                   <CardContent>
                     {studentFees ? (
                       <div className="space-y-4">
-                        <div className="grid grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                           <div>
                             <label className="text-sm font-medium text-gray-600">Total Fees</label>
                             <p className="text-2xl font-bold text-gray-900 mt-1">₹{studentFees.totalFees.toLocaleString()}</p>
@@ -206,7 +221,9 @@ export default function StudentProfile() {
 
                         <div className="pt-4 border-t">
                           <h4 className="font-semibold text-gray-900 mb-3">Payment History</h4>
-                          <Table>
+
+                          {/* Desktop Table */}
+                          <Table className="hidden sm:table">
                             <TableHeader>
                               <TableRow>
                                 <TableHead>Date</TableHead>
@@ -228,6 +245,22 @@ export default function StudentProfile() {
                               ))}
                             </TableBody>
                           </Table>
+
+                          {/* Mobile List */}
+                          <div className="sm:hidden space-y-3">
+                            {studentFees.payments.map((payment, index) => (
+                              <div key={index} className="p-3 border border-gray-200 rounded-lg">
+                                <div className="flex justify-between items-start mb-2">
+                                  <div>
+                                    <p className="font-semibold text-gray-900">₹{payment.amount.toLocaleString()}</p>
+                                    <p className="text-sm text-gray-600">{payment.date}</p>
+                                  </div>
+                                  <Badge variant="secondary">{payment.receiptNo}</Badge>
+                                </div>
+                                <p className="text-sm text-gray-600">via {payment.method}</p>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       </div>
                     ) : (
@@ -269,7 +302,8 @@ export default function StudentProfile() {
                         </div>
                       </div>
 
-                      <Table>
+                      {/* Desktop Table */}
+                      <Table className="hidden sm:table">
                         <TableHeader>
                           <TableRow>
                             <TableHead>Subject</TableHead>
@@ -293,6 +327,24 @@ export default function StudentProfile() {
                           ))}
                         </TableBody>
                       </Table>
+
+                      {/* Mobile List */}
+                      <div className="sm:hidden space-y-3">
+                        {studentExams.subjects.map((subject, index) => (
+                          <div key={index} className="p-3 border border-gray-200 rounded-lg">
+                            <div className="flex justify-between items-start mb-2">
+                              <h5 className="font-semibold text-gray-900">{subject.subject}</h5>
+                              <Badge variant={subject.obtained >= 90 ? 'success' : subject.obtained >= 75 ? 'info' : 'warning'}>
+                                {subject.grade}
+                              </Badge>
+                            </div>
+                            <div className="flex justify-between text-sm">
+                              <span className="text-gray-600">Marks:</span>
+                              <span className="font-medium">{subject.obtained} / {subject.maxMarks}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   ) : (
                     <p className="text-gray-600">No exam results found.</p>

@@ -105,7 +105,8 @@ export default function Fees() {
 
             {/* Fee Structure Tab */}
             <TabsContent value="structure" activeTab={activeTab}>
-              <Card>
+              {/* Desktop Table */}
+              <Card className="hidden md:block">
                 <CardHeader>
                   <CardTitle>Class-wise Fee Structure</CardTitle>
                 </CardHeader>
@@ -140,11 +141,55 @@ export default function Fees() {
                   </Table>
                 </CardContent>
               </Card>
+
+              {/* Mobile Cards */}
+              <div className="md:hidden space-y-4">
+                {feesStructure.map((fee) => (
+                  <Card key={fee.class}>
+                    <CardHeader>
+                      <CardTitle className="text-lg">Class {fee.class}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Tuition Fee:</span>
+                          <span className="font-medium">₹{fee.tuitionFee.toLocaleString()}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Lab Fee:</span>
+                          <span className="font-medium">₹{fee.labFee.toLocaleString()}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Library Fee:</span>
+                          <span className="font-medium">₹{fee.libraryFee.toLocaleString()}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Sports Fee:</span>
+                          <span className="font-medium">₹{fee.sportsFee.toLocaleString()}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Exam Fee:</span>
+                          <span className="font-medium">₹{fee.examFee.toLocaleString()}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Misc Fee:</span>
+                          <span className="font-medium">₹{fee.miscFee.toLocaleString()}</span>
+                        </div>
+                        <div className="flex justify-between pt-2 border-t border-gray-200">
+                          <span className="font-semibold text-gray-900">Total:</span>
+                          <span className="font-bold text-lg">₹{fee.total.toLocaleString()}</span>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </TabsContent>
 
             {/* Payment Status Tab */}
             <TabsContent value="payments" activeTab={activeTab}>
-              <Card>
+              {/* Desktop Table */}
+              <Card className="hidden md:block">
                 <CardHeader>
                   <CardTitle>Student Payment Status</CardTitle>
                 </CardHeader>
@@ -192,6 +237,47 @@ export default function Fees() {
                   </Table>
                 </CardContent>
               </Card>
+
+              {/* Mobile Cards */}
+              <div className="md:hidden space-y-4">
+                <div className="flex gap-4 text-sm mb-4">
+                  <span className="text-gray-600">
+                    Fully Paid: <span className="font-semibold text-green-600">{paidStudents}</span>
+                  </span>
+                  <span className="text-gray-600">
+                    Partial Payment: <span className="font-semibold text-yellow-600">{partialStudents}</span>
+                  </span>
+                </div>
+                {feePayments.map((payment) => (
+                  <Card key={payment.studentId}>
+                    <CardContent className="p-4">
+                      <div className="flex items-start justify-between mb-3">
+                        <div>
+                          <h3 className="font-semibold text-gray-900">{payment.studentName}</h3>
+                          <p className="text-sm text-gray-600">Class {payment.class}</p>
+                        </div>
+                        <Badge variant={payment.status === 'Paid' ? 'success' : 'warning'}>
+                          {payment.status}
+                        </Badge>
+                      </div>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Total Fees:</span>
+                          <span className="font-medium">₹{payment.totalFees.toLocaleString()}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Paid Amount:</span>
+                          <span className="font-medium text-green-600">₹{payment.paidAmount.toLocaleString()}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Due Amount:</span>
+                          <span className="font-medium text-red-600">₹{payment.dueAmount.toLocaleString()}</span>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </TabsContent>
           </>
         )}

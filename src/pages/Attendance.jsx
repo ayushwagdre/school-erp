@@ -126,8 +126,8 @@ export default function Attendance() {
         </CardContent>
       </Card>
 
-      {/* Attendance Table */}
-      <Card>
+      {/* Attendance Table - Desktop */}
+      <Card className="hidden md:block">
         <CardHeader>
           <CardTitle>
             Attendance Record - Class {selectedClass} ({selectedDate})
@@ -190,6 +190,60 @@ export default function Attendance() {
           </Table>
         </CardContent>
       </Card>
+
+      {/* Attendance List - Mobile */}
+      <div className="md:hidden space-y-4">
+        <h3 className="text-lg font-semibold text-gray-900">
+          Class {selectedClass} - {selectedDate}
+        </h3>
+        {attendanceData.map((student) => {
+          const todayRecord = student.records.find(r => r.date === selectedDate);
+          const presentCount = student.records.filter(r => r.status === 'Present').length;
+          const attendancePercentage = Math.round((presentCount / student.records.length) * 100);
+
+          return (
+            <Card key={student.studentId}>
+              <CardContent className="p-4">
+                <div className="flex items-start justify-between mb-3">
+                  <div>
+                    <h4 className="font-semibold text-gray-900">{student.studentName}</h4>
+                    <p className="text-sm text-gray-600">Roll: {student.roll}</p>
+                  </div>
+                  <Badge
+                    variant={
+                      todayRecord?.status === 'Present'
+                        ? 'success'
+                        : todayRecord?.status === 'Absent'
+                        ? 'danger'
+                        : 'secondary'
+                    }
+                  >
+                    {todayRecord?.status || 'Not Marked'}
+                  </Badge>
+                </div>
+                <div>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-sm text-gray-600">Overall Attendance</span>
+                    <span className="text-sm font-medium">{attendancePercentage}%</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div
+                      className={`h-2 rounded-full ${
+                        attendancePercentage >= 90
+                          ? 'bg-green-600'
+                          : attendancePercentage >= 75
+                          ? 'bg-yellow-600'
+                          : 'bg-red-600'
+                      }`}
+                      style={{ width: `${attendancePercentage}%` }}
+                    />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
+      </div>
     </div>
   );
 }

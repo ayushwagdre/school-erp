@@ -87,8 +87,8 @@ export default function Students() {
         </CardContent>
       </Card>
 
-      {/* Students Table */}
-      <Card>
+      {/* Students Table - Desktop */}
+      <Card className="hidden md:block">
         <CardHeader>
           <CardTitle>Student List</CardTitle>
         </CardHeader>
@@ -145,6 +145,47 @@ export default function Students() {
           </Table>
         </CardContent>
       </Card>
+
+      {/* Students List - Mobile */}
+      <div className="md:hidden space-y-4">
+        {filteredStudents.map((student) => (
+          <Card key={student.id}>
+            <CardContent className="p-4">
+              <div className="flex items-start gap-4">
+                <img
+                  src={student.photo}
+                  alt={student.name}
+                  className="w-16 h-16 rounded-full"
+                />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between gap-2 mb-2">
+                    <div>
+                      <h3 className="font-semibold text-gray-900">{student.name}</h3>
+                      <p className="text-sm text-gray-600">Roll: {student.roll}</p>
+                    </div>
+                    <Badge variant={student.attendancePercentage >= 90 ? 'success' : student.attendancePercentage >= 75 ? 'warning' : 'danger'}>
+                      {student.attendancePercentage}%
+                    </Badge>
+                  </div>
+                  <div className="space-y-1 text-sm text-gray-600">
+                    <p>Class: {student.class}-{student.section}</p>
+                    <p>Parent: {student.parentName}</p>
+                    <p>Phone: {student.phone}</p>
+                  </div>
+                  <Button
+                    size="sm"
+                    className="mt-3 w-full"
+                    onClick={() => handleViewProfile(student.id)}
+                  >
+                    <Eye className="w-4 h-4" />
+                    View Profile
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
 
       {/* Add Student Modal */}
       <Modal
